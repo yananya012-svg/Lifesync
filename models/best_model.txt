@@ -1,0 +1,2 @@
+Best Model : LinearRegression
+Best R2 Score : 1.0000
