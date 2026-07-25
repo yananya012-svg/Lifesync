@@ -1,6 +1,10 @@
 # Virtual Environment
 venv/
 
+# Large model files (exceed GitHub's 100MB limit)
+models/electricity_model.pkl
+models/*.pkl
+
 # Python
 __pycache__/
 *.py[cod]
