@@ -3,11 +3,23 @@ import pandas as pd
 import joblib
 import plotly.express as px
 import plotly.graph_objects as go
+
 st.set_page_config(
     page_title="Expense Prediction",
     page_icon="💰",
     layout="wide"
 )
+
+def load_css():
+    with open("assets/style.css") as f:
+        st.markdown(
+            f"<style>{f.read()}</style>",
+            unsafe_allow_html=True
+        )
+
+load_css()
+
+
 
 st.title("💰 Smart Monthly Expense Prediction")
 st.write("Predict your monthly expenses using Machine Learning.")

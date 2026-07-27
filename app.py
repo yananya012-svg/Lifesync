@@ -1,4 +1,12 @@
 import streamlit as st
+import os
+
+from auth import register_user, login_user
+
+
+# ==========================================
+# PAGE CONFIG
+# ==========================================
 
 st.set_page_config(
     page_title="LifeSync AI",
@@ -6,254 +14,345 @@ st.set_page_config(
     layout="wide"
 )
 
+
 # ==========================================
-# HEADER
+# LOAD CSS
 # ==========================================
 
-st.title("🌱 LifeSync AI Platform")
+def load_css():
 
-st.subheader(
-    "Personal Lifestyle • Expense • Electricity Intelligence"
+    try:
+        with open("assets/style.css") as f:
+            st.markdown(
+                f"<style>{f.read()}</style>",
+                unsafe_allow_html=True
+            )
+
+    except:
+        pass
+
+
+load_css()
+
+
+# ==========================================
+# SESSION STATE
+# ==========================================
+
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+
+if "user" not in st.session_state:
+    st.session_state.user = None
+
+
+
+# ==========================================
+# LOGIN PAGE
+# ==========================================
+
+if not st.session_state.logged_in:
+
+
+    st.markdown(
+        """
+        <h1 style="text-align:center;">
+        🌱 LifeSync AI
+        </h1>
+
+        <h3 style="text-align:center;color:gray;">
+        Personal AI Analytics Platform
+        </h3>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+    st.write("")
+
+
+    login, signup = st.tabs(
+        [
+            "🔐 Login",
+            "📝 Sign Up"
+        ]
+    )
+
+
+    # ------------------------------
+    # LOGIN
+    # ------------------------------
+
+    with login:
+
+
+        st.subheader("Welcome Back")
+
+
+        email = st.text_input(
+            "Email",
+            key="login_email"
+        )
+
+
+        password = st.text_input(
+            "Password",
+            type="password",
+            key="login_password"
+        )
+
+
+        if st.button(
+            "Login",
+            use_container_width=True
+        ):
+
+
+            success, user = login_user(
+                email,
+                password
+            )
+
+
+            if success:
+
+                st.session_state.logged_in = True
+
+                st.session_state.user = user
+
+                st.rerun()
+
+
+            else:
+
+                st.error(user)
+
+
+
+    # ------------------------------
+    # SIGN UP
+    # ------------------------------
+
+    with signup:
+
+
+        st.subheader("Create Account")
+
+
+        name = st.text_input(
+            "Full Name"
+        )
+
+
+        email = st.text_input(
+            "Email",
+            key="signup_email"
+        )
+
+
+        password = st.text_input(
+            "Password",
+            type="password",
+            key="signup_password"
+        )
+
+
+        confirm = st.text_input(
+            "Confirm Password",
+            type="password"
+        )
+
+
+        if st.button(
+            "Create Account",
+            use_container_width=True
+        ):
+
+
+            if password != confirm:
+
+                st.error(
+                    "Passwords do not match"
+                )
+
+
+            else:
+
+
+                success, message = register_user(
+                    name,
+                    email,
+                    password
+                )
+
+
+                if success:
+
+                    st.success(message)
+
+                else:
+
+                    st.error(message)
+
+
+
+    st.stop()
+
+
+
+# ==========================================
+# AFTER LOGIN - PAGE NAVIGATION
+# ==========================================
+
+
+## ==========================================
+# PAGE NAVIGATION
+# ==========================================
+
+home = st.Page(
+    "app_pages/01_🏠_Home.py",
+    title="Home",
+    icon="🏠"
 )
 
-st.markdown("---")
-
-st.success(
-    "🚀 Welcome to the AI Powered Personal Resource Optimization Platform"
+lifestyle = st.Page(
+    "app_pages/08_🧠_Lifestyle_Prediction.py",
+    title="Lifestyle Prediction",
+    icon="🧠"
 )
 
-st.write("""
-LifeSync AI combines multiple Machine Learning models to analyze
-daily lifestyle, monthly expenses and electricity usage.
-The platform predicts future outcomes and provides personalized AI recommendations.
-""")
-
-st.markdown("---")
-
-# ==========================================
-# DASHBOARD METRICS
-# ==========================================
-
-st.header("📊 Dashboard Overview")
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.metric(
-        "📂 Datasets",
-        "3"
-    )
-
-with col2:
-    st.metric(
-        "🤖 ML Models",
-        "15"
-    )
-
-with col3:
-    st.metric(
-        "📈 Visualizations",
-        "40+"
-    )
-
-col4, col5, col6 = st.columns(3)
-
-with col4:
-    st.metric(
-        "⚡ Prediction Modules",
-        "3"
-    )
-
-with col5:
-    st.metric(
-        "🏆 Best Accuracy",
-        "99%"
-    )
-
-with col6:
-    st.metric(
-        "🧠 AI Recommendation Systems",
-        "3"
-    )
-
-st.markdown("---")
-st.header("🚀 Platform Features")
-
-c1, c2, c3 = st.columns(3)
-
-with c1:
-
-    st.info("""
-### 🌱 Lifestyle Prediction
-
-✔ Productivity Prediction
-
-✔ Lifestyle Analysis
-
-✔ Stress Detection
-
-✔ AI Suggestions
-""")
-
-with c2:
-
-    st.success("""
-### 💰 Expense Prediction
-
-✔ Monthly Expense Prediction
-
-✔ Savings Analysis
-
-✔ Budget Health
-
-✔ Financial Tips
-""")
-
-with c3:
-
-    st.warning("""
-### ⚡ Electricity Prediction
-
-✔ Electricity Bill Prediction
-
-✔ Energy Score
-
-✔ Consumption Analysis
-
-✔ Energy Saving Tips
-""")
-
-st.markdown("---")
-st.header("📌 Project Workflow")
-
-st.code("""
-
-Raw Dataset
-      │
-      ▼
-Data Cleaning
-      │
-      ▼
-Exploratory Data Analysis
-      │
-      ▼
-Feature Engineering
-      │
-      ▼
-Machine Learning Models
-      │
-      ▼
-Model Evaluation
-      │
-      ▼
-Prediction
-      │
-      ▼
-AI Recommendation System
-
-""")
-
-st.markdown("---")
-
-st.header("⚙ Technologies Used")
-
-col1,col2,col3,col4=st.columns(4)
-
-with col1:
-
-    st.success("Python")
-
-    st.success("Pandas")
-
-    st.success("NumPy")
-
-with col2:
-
-    st.success("Scikit-Learn")
-
-    st.success("Joblib")
-
-    st.success("Machine Learning")
-
-with col3:
-
-    st.success("Matplotlib")
-
-    st.success("Plotly")
-
-    st.success("Streamlit")
-
-with col4:
-
-    st.success("GitHub")
-
-    st.success("VS Code")
-
-    st.success("CSV Dataset")
-    st.markdown("---")
-
-st.header("🧭 Navigation Guide")
-
-st.info("""
-
-🏠 Home
-
-📊 Lifestyle Prediction
-
-💰 Expense Prediction
-
-⚡ Electricity Prediction
-
-📈 Model Comparison
-
-🧠 AI Insights
-
-👩‍💻 About
-
-""")
-st.markdown("---")
-
-st.header("📈 Platform Statistics")
-
-left,right=st.columns(2)
-
-with left:
-
-    st.metric(
-        "Total Dataset Records",
-        "60,000"
-    )
-
-    st.metric(
-        "Total Features",
-        "60+"
-    )
-
-    st.metric(
-        "Models Trained",
-        "15"
-    )
-
-with right:
-
-    st.metric(
-        "EDA Charts",
-        "40+"
-    )
-
-    st.metric(
-        "Prediction Pages",
-        "3"
-    )
-
-    st.metric(
-        "Reports Download",
-        "CSV Enabled"
-    )
-    st.markdown("---")
-
-st.success("✅ LifeSync AI Platform Ready")
-
-st.caption(
-    "Developed by Ananya Yadav | B.Tech AI | Machine Learning & Data Science"
+expense = st.Page(
+    "app_pages/03_💰_Expense_Prediction.py",
+    title="Expense Prediction",
+    icon="💰"
 )
+
+electricity = st.Page(
+    "app_pages/04_⚡_Electricity_Prediction.py",
+    title="Electricity Prediction",
+    icon="⚡"
+)
+
+eda = st.Page(
+    "app_pages/02_📊_EDA.py",
+    title="EDA",
+    icon="📊"
+)
+
+model = st.Page(
+    "app_pages/05_📈_Model_Comparison.py",
+    title="Model Comparison",
+    icon="📈"
+)
+
+insights = st.Page(
+    "app_pages/06_💡_AI_Insights.py",
+    title="AI Insights",
+    icon="💡"
+)
+
+about = st.Page(
+    "app_pages/07_👩‍💻_About.py",
+    title="About",
+    icon="👩‍💻"
+)
+
+profile = st.Page(
+    "app_pages/09_👤_Profile.py",
+    title="Profile",
+    icon="👤"
+)
+
+
+navigation = st.navigation(
+    [
+        home,
+        lifestyle,
+        expense,
+        electricity,
+        eda,
+        model,
+        insights,
+        about,
+        profile
+    ]
+)
+
+navigation.run()
+
+# ==========================================
+# SIDEBAR
+# ==========================================
+
+with st.sidebar:
+
+
+    st.markdown(
+        """
+        ## 🌱 LifeSync AI
+        
+        Personal AI Analytics Platform
+        """
+    )
+
+
+    st.divider()
+
+
+    if st.session_state.user:
+
+        st.success(
+            f"👋 {st.session_state.user[1]}"
+        )
+
+
+    st.divider()
+
+
+    st.subheader("📊 Modules")
+
+
+    st.write(
+        """
+        Machine Learning
+        Data Analysis
+        AI Predictions
+        """
+    )
+
+
+    st.divider()
+
+
+    if st.button(
+        "🚪 Logout",
+        use_container_width=True
+    ):
+
+        st.session_state.logged_in = False
+
+        st.session_state.user = None
+
+        st.rerun()
+
+
+
+# ==========================================
+# RUN NAVIGATION
+# ==========================================
+
+navigation = st.navigation(
+    [
+        home,
+        lifestyle,
+        expense,
+        electricity,
+        eda,
+        model,
+        insights,
+        about
+    ]
+)
+
+navigation.run()
