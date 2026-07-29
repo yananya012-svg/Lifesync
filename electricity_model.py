@@ -69,24 +69,36 @@ X_train, X_test, y_train, y_test = train_test_split(
 # Models
 # ---------------------------------------
 
+# ---------------------------------------
+# Models
+# ---------------------------------------
+
 models = {
 
     "Linear Regression": LinearRegression(),
 
-    "Decision Tree": DecisionTreeRegressor(random_state=42),
+    "Decision Tree": DecisionTreeRegressor(
+        random_state=42,
+        max_depth=15
+    ),
 
     "Random Forest": RandomForestRegressor(
-        n_estimators=100,
-        random_state=42
+        n_estimators=20,
+        max_depth=15,
+        random_state=42,
+        n_jobs=-1
     ),
 
     "Gradient Boosting": GradientBoostingRegressor(
+        n_estimators=50,
         random_state=42
     ),
 
     "Extra Trees": ExtraTreesRegressor(
-        n_estimators=100,
-        random_state=42
+        n_estimators=20,
+        max_depth=15,
+        random_state=42,
+        n_jobs=-1
     )
 
 }
@@ -96,7 +108,6 @@ results = []
 best_score = -999
 best_model = None
 best_name = ""
-
 # ---------------------------------------
 # Train Models
 # ---------------------------------------
@@ -116,13 +127,13 @@ for name, model in models.items():
         pred
     ) ** 0.5
 
-    print("\n==============================")
+    print("\n====================")
     print(name)
-    print("==============================")
+    print("====================")
 
-    print("R² Score :", round(r2,4))
-    print("MAE      :", round(mae,2))
-    print("RMSE     :", round(rmse,2))
+    print("R2 Score :", round(r2,4))
+    print("MAE :", round(mae,2))
+    print("RMSE :", round(rmse,2))
 
     results.append([
         name,
@@ -138,19 +149,19 @@ for name, model in models.items():
         best_model = model
 
         best_name = name
-
-# ---------------------------------------
+        # ---------------------------------------
 # Save Best Model
 # ---------------------------------------
 
 joblib.dump(
     best_model,
-    "models/electricity_model.pkl"
+    "models/electricity_model.pkl",
+    compress=3
 )
 
 print("\nBest Model :", best_name)
-
 print("Best Score :", round(best_score,4))
+
 
 # ---------------------------------------
 # Save Results
@@ -161,15 +172,10 @@ results_df = pd.DataFrame(
     results,
 
     columns=[
-
         "Model",
-
         "R2 Score",
-
         "MAE",
-
         "RMSE"
-
     ]
 
 )
