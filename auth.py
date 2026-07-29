@@ -1,6 +1,38 @@
 import sqlite3
 import bcrypt
 
+# -------------------------------------
+# CREATE DATABASE
+# -------------------------------------
+
+def create_database():
+
+    conn = sqlite3.connect("users.db")
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+        full_name TEXT NOT NULL,
+
+        email TEXT UNIQUE NOT NULL,
+
+        password BLOB NOT NULL
+
+    )
+    """)
+
+    conn.commit()
+
+    conn.close()
+
+
+# Create database automatically
+create_database()
+
 
 # -------------------------------------
 # Register New User
@@ -12,7 +44,6 @@ def register_user(full_name, email, password):
 
     cursor = conn.cursor()
 
-    # Check if email already exists
     cursor.execute(
         "SELECT * FROM users WHERE email=?",
         (email,)
@@ -26,7 +57,6 @@ def register_user(full_name, email, password):
 
         return False, "Email already registered."
 
-    # Hash password
     hashed_password = bcrypt.hashpw(
         password.encode("utf-8"),
         bcrypt.gensalt()
@@ -87,6 +117,4 @@ def login_user(email, password):
 
         return True, user
 
-    else:
-
-        return False, "Incorrect Password."
+    return False, "Incorrect Password."
