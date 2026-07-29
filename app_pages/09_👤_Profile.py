@@ -147,3 +147,12 @@ st.subheader(
 st.success(
     "🟢 Active User"
 )
+st.metric(
+    "Account Status",
+    "Active"
+)
+
+st.metric(
+    "Predictions Made",
+    len(history)
+)

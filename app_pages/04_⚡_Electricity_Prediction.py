@@ -185,6 +185,7 @@ if st.button(
     "⚡ Predict Electricity Bill",
     key="electricity_prediction"
 ):
+    
 
     total_appliances = (
         ac_count
@@ -276,6 +277,7 @@ if st.button(
     st.success(
         f"⚡ Estimated Monthly Electricity Bill: ₹ {prediction:,.2f}"
     )
+    
 
     # ---------------------------------------
     # Summary Cards
@@ -546,6 +548,7 @@ if st.button(
         • Monitor your monthly consumption.
 
         """)
+        
     # ---------------------------------------
     # Download Report
     # ---------------------------------------

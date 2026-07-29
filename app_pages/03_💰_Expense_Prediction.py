@@ -173,6 +173,7 @@ if st.button("💰 Predict Expense", key="predict_expense_button"):
                 "💰 Remaining Savings",
                 f"₹ {savings:,.0f}"
             )
+            
 
         # -----------------------------------
         # Expense Ratio
@@ -423,5 +424,6 @@ if st.button("💰 Predict Expense", key="predict_expense_button"):
     )
 
     st.success("🎉 Prediction Completed Successfully!")
+    
 
         

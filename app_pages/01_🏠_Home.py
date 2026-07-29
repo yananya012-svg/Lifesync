@@ -106,8 +106,40 @@ st.title("🌱 LifeSync AI Dashboard")
 st.caption("Personal AI Analytics Platform")
 
 st.success(f"Welcome back, {user_name}! 👋")
+st.balloons()
+
+st.info(
+    """
+🚀 Welcome to LifeSync AI
+
+An Intelligent Machine Learning Platform for:
+
+• Lifestyle Prediction
+
+• Expense Prediction
+
+• Electricity Consumption Prediction
+
+• AI Recommendations
+"""
+)
 
 st.divider()
+st.header("🌟 Project Highlights")
+
+col1, col2, col3, col4 = st.columns(4)
+
+with col1:
+    st.metric("Models", "15")
+
+with col2:
+    st.metric("Accuracy", "99%")
+
+with col3:
+    st.metric("Datasets", "3")
+
+with col4:
+    st.metric("Users", "Secure Login")
 
 # ======================================================
 # DASHBOARD METRICS

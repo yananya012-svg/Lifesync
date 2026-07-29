@@ -210,6 +210,10 @@ if not st.session_state.logged_in:
 # PAGE NAVIGATION
 # ==========================================
 
+# ==========================================
+# PAGES
+# ==========================================
+
 home = st.Page(
     "app_pages/01_🏠_Home.py",
     title="Home",
@@ -264,6 +268,78 @@ profile = st.Page(
     icon="👤"
 )
 
+# ==========================================
+# SIDEBAR
+# ==========================================
+
+with st.sidebar:
+
+    st.markdown(
+        """
+        ## 🌱 LifeSync AI
+
+        Personal AI Analytics Platform
+        """
+    )
+
+    st.divider()
+
+    if st.session_state.user is not None:
+
+        st.success(
+            f"👋 Welcome\n\n{st.session_state.user[1]}"
+        )
+
+        st.caption(
+            st.session_state.user[2]
+        )
+
+    st.divider()
+
+    st.subheader("📊 Platform")
+
+    st.metric("Datasets", "3")
+
+    st.metric("ML Models", "15")
+
+    st.metric("Accuracy", "99%")
+
+    st.metric("Charts", "40+")
+
+    st.divider()
+
+    st.subheader("⚙ Tech Stack")
+
+    st.success("Python")
+
+    st.success("Machine Learning")
+
+    st.success("Pandas")
+
+    st.success("NumPy")
+
+    st.success("Scikit-Learn")
+
+    st.success("Plotly")
+
+    st.success("Streamlit")
+
+    st.divider()
+
+    if st.button(
+        "🚪 Logout",
+        use_container_width=True
+    ):
+
+        st.session_state.logged_in = False
+
+        st.session_state.user = None
+
+        st.switch_page("app.py")
+
+# ==========================================
+# NAVIGATION
+# ==========================================
 
 navigation = st.navigation(
     [
@@ -276,82 +352,6 @@ navigation = st.navigation(
         insights,
         about,
         profile
-    ]
-)
-
-navigation.run()
-
-# ==========================================
-# SIDEBAR
-# ==========================================
-
-with st.sidebar:
-
-
-    st.markdown(
-        """
-        ## 🌱 LifeSync AI
-        
-        Personal AI Analytics Platform
-        """
-    )
-
-
-    st.divider()
-
-
-    if st.session_state.user:
-
-        st.success(
-            f"👋 {st.session_state.user[1]}"
-        )
-
-
-    st.divider()
-
-
-    st.subheader("📊 Modules")
-
-
-    st.write(
-        """
-        Machine Learning
-        Data Analysis
-        AI Predictions
-        """
-    )
-
-
-    st.divider()
-
-
-    if st.button(
-        "🚪 Logout",
-        use_container_width=True
-    ):
-
-        st.session_state.logged_in = False
-
-        st.session_state.user = None
-
-        st.rerun()
-
-
-
-# ==========================================
-# RUN NAVIGATION
-# ==========================================
-
-navigation = st.navigation(
-    [
-        home,
-        lifestyle,
-        expense,
-        electricity,
-        eda,
-        model,
-        insights,
-        about
     ]
 )
 
